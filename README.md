@@ -41,7 +41,7 @@ So to begin, I'll head over to virtualbox and set all computers/servers to talk 
 ![Screenshot (55)](https://github.com/Plutowrl/Active-Directory-HomeLab/assets/166238383/56969dc0-29fe-43b6-bcf4-3f15bbdbafd8)
                          Ref 2: All machines/servers installed on Vbox, all on NAT Network
 
-Next, I had to go into each machine and assign them their respective static ip's as seen in the network diagram in part one. I will show you how I did this for my Windows and Kali machine just to keep things concise. For windows, I went into my network settings and then changed my adapter options to use the static ip: 192.168.10.100. You may also notice my DNS is set to the static ip of my windows server where I installed active directory. This was so>>>>>>>>>>>>>.>>>>>>>>>>>>>>>>>>>>>>>..
+Next, I had to go into each machine and assign them their respective static ip's as seen in the network diagram in part one. I will show you how I did this for my Windows and Kali machine just to keep things concise. For windows, I went into my network settings and then changed my adapter options to use the static ip: 192.168.10.100. You may also notice my DNS is set to the static ip of my windows server where I installed active directory. This was so my target PC was able to resolve my domain server. You will see more of this explanation in part four. 
 
 And for Kali, I clicked the monitor logo at the top right hand corner and then edit connections. You can see the ipv4 option. I hit that and simply put in the static ip: 192.168.10.250 and used google's DNS:
 
@@ -82,8 +82,16 @@ Ref #: Creating new users
 
 Ref #: After successfully creating new users
 
-The last thing to do now was to head over to my windows target machine and then use it to join the newly created domain. We will do this by using the newly created users above. I will use user: Jose Cuntab for reference. You can see here 
+The last thing to do now was to head over to my windows target machine and then use it to join the newly created domain. So on the target Machine, I was able to join the domain by navigating to the Start menu > Searching "This PC" > Properties > Advanced System Settings > Computer Name > Change > Domanin and then filling in name of the domain which as you can see from the snippet below, my domain name is Pluto.wrld. When I did this the first time, I actually got an error that indicated my domain could not be contacted. I did some research and found out the reason was because my Target PC did not know how to resolve Pluto.wrld based on the way DNS works. The way I fixed this was to update my network adapter settings and change my DNS server to point at my domain hosted on 192.168.10.7 as you can recall from the diagram. After that, I hit OK, logged in with Adminstrator credentials and was able to successfully join the domain. I was prompted to do a restart to finalize everything.
 
+![Screenshot (61)](https://github.com/Plutowrl/Active-Directory-HomeLab/assets/166238383/2b22276f-eee8-495f-bc83-0f0e3531dd73)
+Ref #: Using target PC to join newly created domain
+
+Following the restart, I was now able to login with the newly created users. I will use the user: Jose Cuntab as a point of reference. As you can see here, I was able to put in the logon name: jcuntab@Pluto.wrld and my super secure password.  my DNS  We will do this by using the newly created users above. I will use user: Jose Cuntab for reference. You can see here 
+
+
+![Screenshot (62)](https://github.com/Plutowrl/Active-Directory-HomeLab/assets/166238383/3cb14441-ecfc-47c0-a99d-3f49c0f1182e)
+Ref #: Using newly created users to login to the domain
 
 
 
