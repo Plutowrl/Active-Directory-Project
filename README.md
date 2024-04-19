@@ -43,7 +43,7 @@ So to begin, I'll head over to virtualbox and set all computers/servers to talk 
 
 Next, I had to go into each machine and assign them their respective static ip's as seen in the network diagram in part one. I will show you how I did this for my Windows and Kali machine just to keep things concise. For windows, I went into my network settings and then changed my adapter options to use the static ip: 192.168.10.100. You may also notice my DNS is set to the static ip of my windows server where I installed active directory. This was so my target PC was able to resolve my domain server. You will see more of this explanation in part four. 
 
-And for Kali, I clicked the monitor logo at the top right hand corner and then edit connections. You can see the ipv4 option. I hit that and simply put in the static ip: 192.168.10.250 and used google's DNS:
+And for Kali, I clicked the monitor logo at the top right hand corner and then edit connections. You can see the ipv4 option. I hit that and simply put in the static ip: 192.168.10.250 as per my network diagram and I used used google's DNS:
 
 
 ## Part 3
@@ -87,15 +87,47 @@ The last thing to do now was to head over to my windows target machine and then 
 ![Screenshot (61)](https://github.com/Plutowrl/Active-Directory-HomeLab/assets/166238383/2b22276f-eee8-495f-bc83-0f0e3531dd73)
 Ref #: Using target PC to join newly created domain
 
-Following the restart, I was now able to login with the newly created users. I will use the user: Jose Cuntab as a point of reference. As you can see here, I was able to put in the logon name: jcuntab@Pluto.wrld and my super secure password.  my DNS  We will do this by using the newly created users above. I will use user: Jose Cuntab for reference. You can see here 
+Following the restart, I was now able to login with the newly created users. I will use the user: Jose Cuntab as a point of reference. As you can see here, I was able to put in the logon name: jcuntab@Pluto.wrld and my super secure password. 
 
 
 ![Screenshot (62)](https://github.com/Plutowrl/Active-Directory-HomeLab/assets/166238383/3cb14441-ecfc-47c0-a99d-3f49c0f1182e)
 Ref #: Using newly created users to login to the domain
 
+## Part 5 
+This is the final part of this project where things get a little spicy. In this part, the goal was to use the attacking machine running Kali linux and then perform a brute force attack to one of the newly created users from the previous part. To begin, I headed over to the Kali machine and I used a brute force tool: **crowbar**
+
+I will not go into specifics on how to install **crowbar** as there is online documentation. Just remember to update your repositories first with sudo-get update and sudo-get upgrade as that was one error i ran into. So now with **crowbar** installed, I used the very popular **rockyou.txt** wordlist for this attack but I made an important change. The rockyou.txt wordlist is a big file and will take some time going through each word against a target. For the sake of this lab, I only used the first couple lines in the document and saved it in a new document: **passwords.txt**. I then modified the new document by adding an additional line which contains my super secure password **IdK123()!?** for one of the targets. Again, I will use Jose Cuntab as a reference point. See below:
+
+![Screenshot 2024-04-18 174722](https://github.com/Plutowrl/Active-Directory-HomeLab/assets/166238383/d523ea80-8bbe-4f8f-acd0-eb9d935a8040)
+Ref #: Modified passwords.txt file that contains login password as the very bottom for **Jose Cuntab**
+
+It was now time to head back to the target machine. First thing I did was to enable remote desktop by navigating to This PC > Properties > Advanced System Settings > Remote > Allow Remote Connections > Users > Add and then here i filled in the user I wanted to enable rdp for. In this case, Jose Cuntab as you can see at the bottom of the list
+
+![Screenshot 2024-04-18 180801](https://github.com/Plutowrl/Active-Directory-HomeLab/assets/166238383/0e6371e5-7d9f-4338-8955-8c6adb19d539)
+Ref #: Enabling RDP for Jose Cuntab
+
+Now it was finally time to launch the attack. I needed four key things for this: the service type (RDP), the user (jcuntab), the worlist (passwords.txt) and the target ip which from our diagram was 192.168.10.100. On my Kali machine, I used the keywords: **crowbar -b rdp -u jcuntab -C passwords.txt -s 192.168.10.100/32**. The "/32" was just to indicate it was a single host. As you can see from the below snip, the **RDP SUCCESS** indicates a successful brute force attack. 
+
+![Screenshot 2024-04-18 184448](https://github.com/Plutowrl/Active-Directory-HomeLab/assets/166238383/579ddf98-5540-40af-8579-19dbac2b6a2b)
+Ref #: Successful brute force attack against jcuntab!
+
+Now, I made my way back to splunk and ran a search to see what type of events that will generate. If you can recall, I created an index named **endpoint** from part 3. Now i ran a search with endpoint as the index and then specified the account which in this case was jcuntab. I was able to see some events. The main event I was looking for, I matched to an event code **4625**. This event code signifies a failed logon attempt. We can see here from the snip below, the amount of events that were generated.
+
+![Screenshot (66)](https://github.com/Plutowrl/Active-Directory-HomeLab/assets/166238383/3e8473ae-6d8e-4e95-a057-92baf6920a51)
+Ref #: Searching in splunk to identify our brute force attack
+
+To enhance my search, I was mainly looking at the time of occurence as any events that almost simultaneously will be a clear indicator of brute force. As you can see here from the below snips, I clicked on the "show all 61 lines" and then you can see here from the network information, it shows my kali machine and the ip address as the entity that was trying to gain access. The handwork of crowbar!
 
 
+![Screenshot 2024-04-18 192412](https://github.com/Plutowrl/Active-Directory-HomeLab/assets/166238383/ee4a8d52-f4fc-4166-a64a-c63cbe6c170e)
 
-Example below.
+Ref #: Identical timestamps to indicate a clear brute force attack
 
-*Ref 1: Network Diagram*
+
+![Screenshot (65)](https://github.com/Plutowrl/Active-Directory-HomeLab/assets/166238383/ed2b2359-8b19-4b55-84c4-fe6b1a33b2b1)
+
+
+Ref #: Successful identification of brute force
+
+Part 6
+This is the final part of this project. In this part, I 
