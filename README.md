@@ -2,7 +2,7 @@
 
 ## Objective
 
-The goal of this project was to design, deploy, and optimize a fully functional active directory domain environment on prem, leveraging various tools and virtualization technologies which in turn enabled me to simulate real-world scenarios, generate some realistic telemetry data and monitoring for potential security threats. This lab as I have learnt is beneficial both for Red/Blue teamers as it allowed me initiate attacks and understand what to look out for in identifying these attacks. 
+The goal of this project was to design, deploy, and optimize a fully functional active directory domain environment on prem, leveraging various tools and virtualization technologies which in turn enabled me to simulate real-world scenarios, generate some realistic telemetry data and monitoring for potential security threats. This lab as I have learnt is beneficial both for Red/Blue teamers as it allowed me initiate attacks and understand what to look out for in identifying these attacks. If you are looking for the main part of this project, please see **Part 5**
 
 ### Skills Learned
 
