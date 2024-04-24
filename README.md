@@ -1,12 +1,10 @@
 # Active Directory HomeLab
 
 ## Objective
-[Brief Objective - Remove this afterwards]
 
 The goal of this project was to design, deploy, and optimize a fully functional active directory domain environment on prem, leveraging various tools and virtualization technologies which in turn enabled me to simulate real-world scenarios, generate some realistic telemetry data and monitoring for potential security threats. This lab as I have learnt is beneficial both for Red/Blue teamers as it allowed me initiate attacks and understand what to look out for in identifying these attacks. 
 
 ### Skills Learned
-[Bullet Points - Remove this afterwards]
 
 - Advanced understanding of SIEM concepts and practical application.
 - Proficiency in analyzing and interpreting network logs.
@@ -16,14 +14,10 @@ The goal of this project was to design, deploy, and optimize a fully functional 
 - Familiarity with Network/Endpoint Administration
 
 ### Tools Used
-[Bullet Points - Remove this afterwards]
 
 - Security Information and Event Management (SIEM) system for log ingestion and analysis.
 - Network analysis tools (such as Wireshark) for capturing and examining network traffic.
-- Telemetry generation tools to create realistic network traffic and attack scenarios.
-
-## Steps
-drag & drop screenshots here or use imgur and reference them using imgsrc
+- Telemetry generation tools (such as Atomic Red Team) to create realistic network traffic and attack scenarios.
 
 ## Part 1
 For the first part of this project. I drew a logical network diagram as a reference point that will help me map out how I would design the lab. For this project, I used a total of two servers: One for splunk which will be running on ubuntu and the other for Active Directory which will be running on our windows server. Two computers: One target which will be running windows and the other will be my kali linux maching for launching attacks. All servers and computers were configured using VirtualBox.
@@ -116,7 +110,7 @@ Now, I made my way back to splunk and ran a search to see what type of events th
 ![Screenshot (66)](https://github.com/Plutowrl/Active-Directory-HomeLab/assets/166238383/3e8473ae-6d8e-4e95-a057-92baf6920a51)
 Ref #: Searching in splunk to identify our brute force attack
 
-To enhance my search, I was mainly looking at the time of occurence as any events that almost simultaneously will be a clear indicator of brute force. As you can see here from the below snips, I clicked on the "show all 61 lines" and then you can see here from the network information, it shows my kali machine and the ip address as the entity that was trying to gain access. The handwork of crowbar!
+To enhance my search, I was mainly looking at the time of occurence as any events that occured simultaneously will be a clear indicator of brute force. As you can see here from the below snips, I clicked on the "show all 61 lines" and then you can see here from the network information, it shows my kali machine and the ip address as the entity that was trying to gain access. The handwork of crowbar!
 
 
 ![Screenshot 2024-04-18 192412](https://github.com/Plutowrl/Active-Directory-HomeLab/assets/166238383/ee4a8d52-f4fc-4166-a64a-c63cbe6c170e)
@@ -130,4 +124,27 @@ Ref #: Identical timestamps to indicate a clear brute force attack
 Ref #: Successful identification of brute force
 
 Part 6
-This is the final part of this project. In this part, I 
+This is the final part of this project. In this part, I used Atomic Red Team to............... Upon installing ART, there's a file within it titled **atomics**. In this file, there's a bunch of technique ID's which are consistent with the technique id's from the MITRE ATT&CK FRAMEWORK. In my case, I tried to test out a technique of persistence, say creating an account for example (T1136). See below:
+
+
+
+
+![Screenshot 2024-04-23 183510](https://github.com/Plutowrl/Active-Directory-HomeLab/assets/166238383/2e705bf9-0cc3-4f0f-b041-c11dc5397457)
+Ref #: Using the "Create an account Technique ID T1136.001)
+
+There's three variants to that technique ID but for this project, I made use of the first one which is for creating a local user account (T1136.001), I used the command "Invoke-AtomicTest T1163.001". This should automatically generate some telemetry based on creating a local user account. You can see from the snip below that this created an account with the name: NewLocalUser.
+
+![Screenshot 2024-04-23 185844](https://github.com/Plutowrl/Active-Directory-HomeLab/assets/166238383/3249bc2b-7ea3-44e4-bd87-01a6ef262dd0)
+Ref #: Using Atomic Red Team to create a new local user.
+
+Now I went back to splunk to see what kind of telemtry was generated for the new user: NewLocalUser. We can see here from the below snip that there was some telemetry generated for NewLocalUser:
+
+![Screenshot 2024-04-23 191133](https://github.com/Plutowrl/Active-Directory-HomeLab/assets/166238383/f6f9b7de-10d5-41be-85d3-7671cc7b02b6)
+
+Ref #: Splunk search highlighting events for NewLocalUser.
+
+Now what does this mean? The beauty of Atomic Red Team is, it can show you what your system is visible to and what your system can't detect with your current settings. This previous example tells me that my current settings are in fact able to detect any compromise of a local account creation. Now if for example my splunk search returned no events, that will simply tell me that my current settings are not set to be able to detect/alert when a potential adversary is able to create a local account on the system. In summary, ART is a great tool to use and see what type of compromise your system may/may not be blind to!
+
+## The End
+
+
