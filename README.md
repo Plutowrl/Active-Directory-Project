@@ -16,7 +16,7 @@ The goal of this project was to design, deploy, and optimize a fully functional 
 
 - Virtualization tools (such as virtualbox) for configuring and running multiple OS.
 - Security Information and Event Management (SIEM) system for log ingestion and analysis.
-- Telemetry generation tools (such as Atomic Red Team) to create realistic network traffic and attack scenarios.
+- Emulation tools (such as Atomic Red Team) to create realistic network traffic and attack scenarios.
 
 ## Part 1
 For the first part of this project. I drew a logical network diagram as a reference point that will help me map out how I would design the lab. For this project, I used a total of two servers: One for splunk which will be running on ubuntu and the other for Active Directory which will be running on a windows server. Two computers: One target which will be running windows and the other will be my kali linux machine for launching attacks. All servers and computers were configured using VirtualBox.
