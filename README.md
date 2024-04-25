@@ -1,4 +1,4 @@
-# Active Directory HomeLab
+# Active Directory Project
 
 ## Objective
 
